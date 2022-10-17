@@ -5,8 +5,11 @@ import {
     View,
     SafeAreaView,
     TextInput,
-    TouchableWithoutFeedback
+    TouchableWithoutFeedback,
+    TouchableOpacity
 } from 'react-native';
+
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 
 export { Container };
 import React, { useState } from 'react';
@@ -18,29 +21,36 @@ export default function Container() {
 
     const handleRenderTask = ({ item }) => {
         return (
-            <Text style={{ color: 'red' }}> {item} </Text>
+            <Text style={styles.item}> {item} </Text>
         )
     }
 
     const handleAdd = () => {
-        updateTasks([...tasks, task]);
-        updateTask('');
+        if (task.trim()) {
+            updateTasks([...tasks, task]);
+            updateTask('');
+        }
+    }
+
+    async function DiffTask() {
+
     }
 
     return (
         <>
             <SafeAreaView style={styles.container}>
                 <View style={styles.container}>
-                    {/* <Text style={styles.Text}> opa </Text> */}
+                    <Text style={styles.title}> ✎ FAST TO-DO! </Text>
                     <View style={styles.form}>
                         <TextInput
                             style={styles.field}
-                            onChangeText={text =>
-                            updateTask(text)}
+                            onChangeText={text => updateTask(text)}
                             value={task}
                         />
-                        <TouchableWithoutFeedback style={styles.button} onPress={handleAdd}>
-                            <Text style={styles.buttonText}> ADICIONAR </Text>
+                        <TouchableWithoutFeedback onPress={handleAdd}>
+                            <View style={styles.button}>
+                                <Text style={styles.buttonText}> ✚ </Text>
+                            </View>
                         </TouchableWithoutFeedback>
                     </View>
 
@@ -48,7 +58,15 @@ export default function Container() {
                         data={tasks}
                         keyExtractor={item => item}
                         renderItem={handleRenderTask}
-                    />
+                    >
+                        <TouchableOpacity onPress={() => DiffTask(item)}>
+                            <MaterialIcons
+                                name="delete-forever"
+                                size: {25}
+                                color: "#f64c75"
+                            />
+                        </TouchableOpacity>
+                    </FlatList>
                 </View>
             </SafeAreaView>
         </>
@@ -66,22 +84,40 @@ const styles = StyleSheet.create({
         padding: 20
     },
     button: {
-
+        backgroundColor: "#00cc99",
+        padding: 5,
+        borderRadius: 5,
+        justifyContent: 'center',
+        cursor: 'pointer'
     },
     item: {
-
+        borderWidth: 1,
+        width: "73vw",
+        borderColor: "#dcdcdc",
+        padding: 10,
+        marginTop: 15,
+        borderRadius: 3
     },
     buttonText: {
-
+        padding: 10,
     },
     form: {
-
+        flexDirection: 'row'
     },
     field: {
         borderWidth: 1,
         borderColor: '#dcdcdc',
         padding: 10,
         fontSize: 15,
-        color: "#333"
+        color: "#333",
+        borderRadius: 5,
+        flex: 1,
+        marginRight: 10,
+    },
+    title: {
+        fontWeight: 'bold',
+        fontSize: 25,
+        marginBottom: 30,
+        marginLeft: -120
     }
 })

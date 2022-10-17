@@ -6,7 +6,6 @@ export default function App() {
   return (
     <>
       <View style={styles.container}>
-        <Text style={styles.title}> ✎ FAST TO-DO!</Text>
         <StatusBar style="auto" />
       </View>
 
