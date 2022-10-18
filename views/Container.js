@@ -21,7 +21,17 @@ export default function Container() {
 
     const handleRenderTask = ({ item }) => {
         return (
-            <Text style={styles.item}> {item} </Text>
+            <Text style={styles.item}> {item} 
+                <View>
+                    <TouchableOpacity onPress={() => DiffTask(item)}>
+                        <MaterialIcons
+                            name= "delete-forever"
+                            size= {25}
+                            color= "#f64c75"
+                        />
+                    </TouchableOpacity>
+                </View>
+            </Text>
         )
     }
 
@@ -32,8 +42,10 @@ export default function Container() {
         }
     }
 
-    async function DiffTask() {
-
+    const DiffTask = (index) => {
+        const newVector = [...tasks]
+        newVector.splice(index, 1)
+        updateTasks(newVector)
     }
 
     return (
@@ -55,18 +67,11 @@ export default function Container() {
                     </View>
 
                     <FlatList
+                        showsVerticalScrollIndicator={false}
                         data={tasks}
                         keyExtractor={item => item}
                         renderItem={handleRenderTask}
-                    >
-                        <TouchableOpacity onPress={() => DiffTask(item)}>
-                            <MaterialIcons
-                                name="delete-forever"
-                                size: {25}
-                                color: "#f64c75"
-                            />
-                        </TouchableOpacity>
-                    </FlatList>
+                    />
                 </View>
             </SafeAreaView>
         </>
@@ -91,12 +96,15 @@ const styles = StyleSheet.create({
         cursor: 'pointer'
     },
     item: {
+        display: 'flex',
         borderWidth: 1,
         width: "73vw",
         borderColor: "#dcdcdc",
         padding: 10,
         marginTop: 15,
-        borderRadius: 3
+        borderRadius: 3,
+        flexDirection: 'row',
+        justifyContent: 'space-between'
     },
     buttonText: {
         padding: 10,
@@ -118,6 +126,5 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 25,
         marginBottom: 30,
-        marginLeft: -120
     }
 })
