@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundImage: 'linear-gradient(blue, white)'
   },
   title: {
     marginTop: "-200px",

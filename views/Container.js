@@ -9,7 +9,7 @@ import {
     TouchableOpacity
 } from 'react-native';
 
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 export { Container };
 import React, { useState } from 'react';
@@ -21,17 +21,29 @@ export default function Container() {
 
     const handleRenderTask = ({ item }) => {
         return (
-            <Text style={styles.item}> {item} 
-                <View>
-                    <TouchableOpacity onPress={() => DiffTask(item)}>
-                        <MaterialIcons
-                            name= "delete-forever"
-                            size= {25}
-                            color= "#f64c75"
-                        />
-                    </TouchableOpacity>
-                </View>
-            </Text>
+            <>
+                <Text style={styles.item}> {item}
+                    <View>
+                        <TouchableOpacity onPress={() => DiffTask(item)}>
+                            <MaterialIcons
+                                name="done"
+                                size={25}
+                                color="green"
+                            />
+                        </TouchableOpacity>
+                    </View>
+
+                    {/* <View style={{display: 'flex' ,marginRight: 10}}>
+                        <TouchableOpacity onPress={() => DiffTask(item)}>
+                            <MaterialIcons
+                                name="delete-forever"
+                                size={25}
+                                color="#f64c75"
+                            />
+                        </TouchableOpacity>
+                    </View> */}
+                </Text>
+            </>
         )
     }
 
@@ -42,7 +54,8 @@ export default function Container() {
         }
     }
 
-    const DiffTask = (index) => {
+    const DiffTask = (index) => { // exclui o primeiro apenas
+        console.log(index)
         const newVector = [...tasks]
         newVector.splice(index, 1)
         updateTasks(newVector)
@@ -86,7 +99,7 @@ const styles = StyleSheet.create({
         marginBottom: 150,
         height: 500,
         marginTop: "-200px",
-        padding: 20
+        padding: 20,
     },
     button: {
         backgroundColor: "#00cc99",
@@ -99,7 +112,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         borderWidth: 1,
         width: "73vw",
-        borderColor: "#dcdcdc",
+        borderColor: "#black",
         padding: 10,
         marginTop: 15,
         borderRadius: 3,
@@ -110,21 +123,22 @@ const styles = StyleSheet.create({
         padding: 10,
     },
     form: {
-        flexDirection: 'row'
+        flexDirection: 'row',
     },
     field: {
         borderWidth: 1,
-        borderColor: '#dcdcdc',
+        borderColor: '#black',
         padding: 10,
         fontSize: 15,
         color: "#333",
         borderRadius: 5,
         flex: 1,
         marginRight: 10,
+        width: '20em'
     },
     title: {
         fontWeight: 'bold',
-        fontSize: 25,
+        fontSize: 45,
         marginBottom: 30,
     }
 })
