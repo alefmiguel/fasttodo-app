@@ -1,4 +1,3 @@
-import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 
 import { 
@@ -7,9 +6,15 @@ import {
   Text, 
   View,
   TextInput,
-  TouchableOpacity
+  TouchableOpacity,
+  KeyboardAvoidingView,
+  Platform,
+  Keyboard,
+  Alert
  } 
 from 'react-native';
+
+// import { AsyncStorage } from '@react-native-community/async-storage';
 
 import { Ionicons, MaterialIcons } from '@expo/vector-icons'
 
@@ -21,45 +26,120 @@ export default function App() {
   ]);
   const [newTask, setNewTask] = useState('');
 
+  // useEffect(() => {
+  //   async function carregaDados() {
+  //     const task = await AsyncStorage.getItem("task");
+
+  //     if (task) {
+  //       setTask(JSON.parse(task));
+  //     }
+  //   }
+  // }, [])
+
+  // useEffect(() => {
+  //   async function salvarDados() {
+  //     AsyncStorage.setItem("task", JSON.stringify(task));
+  //   }
+  //   salvarDados();
+  // }, [task])
+
+  async function addTask() {
+
+    if (newTask === '') {
+      return;
+    }
+
+    const search = task.filter(task => task === newTask);
+
+    if (search.length != 0) {
+      Alert.alert("Atenção", "Nome da tarefa repetida!");
+      return;
+    }
+
+    setTask([ ... task, newTask]);
+    setNewTask('');
+
+    Keyboard.dismiss();
+  }
+
+  useEffect(() => {
+    console.log(newTask);
+  }, [newTask]);
+
+  async function removeTask(item) {
+    // Alert.alert(
+    //   "Deletar Task",
+    //   "Tem certeza que deseja remover esta anotação?",
+    //   [
+    //     {
+    //       text: "Cancel",
+    //       onPress: () => {
+    //         return
+    //       },
+    //       style: 'cancel'
+    //     },
+    //     {
+    //       text: "OK",
+    //       onPress: () => setTask(task.filter(tasks => tasks != item))
+    //     }
+    //   ],
+    //   { cancelable: false }
+    // )
+
+    setTask(task.filter(tasks => tasks != item))
+  }
+
     return (
       <>
-        <View style={styles.container}>
-          <View style={styles.body}>
-            <FlatList 
-            style={styles.flatlist}
-            data={task}
-            keyExtractor={item => item.toString()}
-            showsVerticalScrollIndicator={false}
-            renderItem={( { item } ) => (
-              <View style={styles.containerView}>
-                <Text> { item } </Text>
-                <TouchableOpacity>
-                  <MaterialIcons 
-                  name='delete-forever'
-                  size={25}
-                  color='#f64675'
-                  />
-                </TouchableOpacity>
-              </View>
-            )}
-            >
+        <KeyboardAvoidingView
+        keyboardVerticalOffset={0}
+        behavior="padding"
+        style={{ flex: 1 }}
+        enabled={ Platform.OS === 'ios' }
+        >
+          <View style={styles.container}>
+            <View style={styles.body}>
+              <FlatList 
+              style={styles.flatlist}
+              data={task}
+              keyExtractor={item => item.toString()}
+              showsVerticalScrollIndicator={false}
+              renderItem={( { item } ) => (
+                <View style={styles.containerView}>
+                  <Text style={styles.text}> { item } </Text>
+                  <TouchableOpacity onPress={() => removeTask(item)}>
+                    <MaterialIcons 
+                    name='delete-forever'
+                    size={25}
+                    color='#f64675'
+                    />
+                  </TouchableOpacity>
+                </View>
+              )}
+              >
 
-            </FlatList>
-          </View>
+              </FlatList>
+            </View>
 
-          <View style={styles.form}>
-            <TextInput 
-            style={styles.input}
-            placeholderTextColor="#999"
-            autoCorrect={true}
-            placeholder='Adicione uma tarefa'
-            maxLength={25}
-            />
-            <TouchableOpacity style={styles.button}>
-              <Ionicons name="ios-add" size={24} color="#fff" />
-            </TouchableOpacity>
+            <View style={styles.form}>
+              <TextInput 
+              style={styles.input}
+              placeholderTextColor="#999"
+              autoCorrect={true}
+              placeholder='Adicione uma tarefa'
+              maxLength={25}
+              onChangeText={text => setNewTask(text)}
+              value={newTask}
+              />
+              <TouchableOpacity 
+              style={styles.button} 
+              onPress={() => addTask()}
+              >
+                <Ionicons name="ios-add" size={24} color="#fff" />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
+        </KeyboardAvoidingView>
       </>
     );
   }
@@ -123,5 +203,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     borderWidth: 1,
     borderColor: '#eee'
+  },
+
+  text: {
+    fontSize: 14,
+    color: '#333',
+    fontWeight: 'bold',
+    marginTop: 4,
+    textAlign: 'center',
   }
 });
